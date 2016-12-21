@@ -1,3 +1,5 @@
+#! /usr/bin/env node
+
 const ASANA_ACCESS_TOKEN = "";
 const DEBUG = true;//"verbose";
 const FORCE_CREATE_LOCAL = false;
