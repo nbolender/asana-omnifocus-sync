@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "git clone https://github.com/brandonpittman/OmniFocus.git node_modules/OmniFocus && git clone https://github.com/mgax/applescript-json.git node_modules/applescript-json && cd node_modules/applescript-json && make",
+    "postinstall": "cd applescripts && make"
   },
   "author": "",
   "license": "ISC",

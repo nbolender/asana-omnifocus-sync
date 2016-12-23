@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 
 const ASANA_ACCESS_TOKEN = "";
-const DEBUG = true;//"verbose";
+const DEBUG = false;
 const FORCE_CREATE_LOCAL = false;
 
 const os = require('os');
@@ -11,8 +11,12 @@ var applescript = require('applescript');
 var moment = require("moment");
 
 try {
-	fs.copySync("./omnifocus.scpt", os.homedir() + "/Library/Script Libraries/omnifocus.scpt");
-	fs.copySync("./json.scpt", os.homedir() + "/Library/Script Libraries/json.scpt");
+	if (!fs.existsSync(os.homedir() + "/Library/Script Libraries/omnifocus.scpt")) {
+		fs.copySync(__dirname + "/node_modules/OmniFocus/OmniFocus Library/omnifocus.scpt", os.homedir() + "/Library/Script Libraries/omnifocus.scpt");
+	}
+	if (!fs.existsSync(os.homedir() + "/Library/Script Libraries/json.scpt")) {
+		fs.copySync(__dirname + "/node_modules/applescript-json/json.scpt", os.homedir() + "/Library/Script Libraries/json.scpt");
+	}
 } catch (error) {
 	console.log("Could not copy file: ", error);
 }
@@ -29,26 +33,7 @@ function createLocalTask(task) {
 		return true;
 	}
 
-	/*var transportText = task.name + " @Asana";
-
-	if (task.projects && task.projects[0] && task.projects[0].section) {
-		transportText += " ::" + task.projects[0].section.name;
-	} else if (task.projects && task.projects[0]) {
-		transportText += " ::" + task.projects[0].name;
-	}
-
-	if (task.due_on) {
-		transportText += " #" + task.due_on;
-		if (task.due_at) {
-			transportText += " " + task.due_at;
-		}
-	}
-
-	if (task.notes) {
-		transportText += " //" + task.notes;
-	}*/
-
-	applescript.execFile("createTask.scpt", [
+	applescript.execFile(__dirname + "/applescripts/createTask.scpt", [
 		//transportText
 		task.name,
 		(task.projects && task.projects[0] ? task.projects[0].name : '-'),
@@ -81,7 +66,7 @@ function updateLocalTask(task) {
 		task.notes ? task.notes : '-'
 	];
 
-	applescript.execFile("updateTask.scpt", parameters, function (error, data, body) {
+	applescript.execFile(__dirname + "/applescripts/updateTask.scpt", parameters, function (error, data, body) {
 		if (!error) {
 			if (DEBUG == "verbose") console.log("Local task updated.");
 		} else {
@@ -92,7 +77,7 @@ function updateLocalTask(task) {
 
 function getLocalTaskData(id, callback, secondTry) {
 	if (DEBUG == "verbose") console.log("Getting local task data: " + id);
-	applescript.execFile("getTaskData.scpt", [id], function (error, data, body) {
+	applescript.execFile(__dirname + "/applescripts/getTaskData.scpt", [id], function (error, data, body) {
 		try {
 			var parsedData = JSON.parse(data);
 		} catch (error) {
