@@ -10,6 +10,15 @@ var asana = require('asana');
 var applescript = require('applescript');
 var moment = require("moment");
 
+// Determine if OmniFocus is running
+applescript.execString('tell application "System Events" to (name of processes) contains "OmniFocus"', function (error, data, body) {
+	if (data != "true") {
+		if (DEBUG) console.log("OmniFocus not running");
+		process.exit();
+	}
+});
+
+// Copy Applescripts
 try {
 	if (!fs.existsSync(os.homedir() + "/Library/Script Libraries/omnifocus.scpt")) {
 		fs.copySync(__dirname + "/node_modules/OmniFocus/OmniFocus Library/omnifocus.scpt", os.homedir() + "/Library/Script Libraries/omnifocus.scpt");
@@ -210,5 +219,7 @@ client.users.me().then(function(user) {
 });
 
 process.on('exit', function () {
-	console.log("\nProcessed " + (created + updated) + " remote tasks (" + created + " new; " + updated + " existing)");
+	if (created + updated > 0) {
+		console.log("Processed " + (created + updated) + " remote tasks (" + created + " new; " + updated + " existing)");
+	}
 });
