@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>Label</key>
+		<string>com.github.nbolender.asana-omnifocus-sync</string>
+		<key>ProgramArguments</key>
+		<array>
+			<string>/path/to/node</string>
+			<string>/path/to/asana-sync/index.js</string>
+		</array>
+		<key>RunAtLoad</key>
+		<false/>
+		<key>StandardOutPath</key>
+		<string>/path/to/asana-sync/sync.log</string>
+		<key>StartCalendarInterval</key>
+		<array>
+			<dict>
+				<key>Minute</key>
+				<integer>0</integer>
+			</dict>
+			<dict>
+				<key>Minute</key>
+				<integer>30</integer>
+			</dict>
+		</array>
+		<key>WatchPaths</key>
+		<array>
+			<string>/Users/<USERNAME>/Library/Containers/com.omnigroup.OmniFocus2/Data/Library/Application Support/OmniFocus</string>
+		</array>
+		<key>ThrottleInterval</key>
+		<integer>60</integer>
+	</dict>
+</plist>
